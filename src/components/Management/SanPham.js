@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, message, Button, Divider, Popconfirm } from 'antd';
+import { Table, message, Button, Divider, Popconfirm, Tag } from 'antd';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
 import SanPhamForm from '../Form/SanPhamForm'
@@ -18,16 +18,21 @@ class SanPham extends Component {
 
   columns = [{
   title: 'Tên SP',
-  dataIndex: 'TenSP',
-  key: 'TenSP',
+  dataIndex: 'name',
+  key: 'name',
 }, {
   title: 'Giá Thuê',
-  dataIndex: 'GiaThue',
-  key: 'GiaThue',
+  dataIndex: 'price',
+  key: 'price',
 },  {
   title: 'Available',
-  dataIndex: 'Available',
-  key: 'Available',
+  dataIndex: 'available',
+  key: 'available',
+  render: available => (
+    <Tag color={available? 'green' : 'red'}>
+        {_.toString(available)}
+    </Tag>
+  )
 }, {
   title: 'Action',
   key: 'action',

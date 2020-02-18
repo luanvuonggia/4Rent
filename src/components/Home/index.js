@@ -36,14 +36,14 @@ class HomePage extends Component {
 
   getLatestData = () => {
     Promise.all([
-      firebase.getData('DonHang'),
-      firebase.getData('KhachHang'),
-      firebase.getData('SanPham')]
-      ).then(([DonHang, KhachHang, SanPham]) => {
+      firebase.getData('Customer'),
+      //firebase.getData('KhachHang'),
+      firebase.getData('Product')]
+      ).then(([Customer, Product]) => {
         this.setState({
-          DonHang: this.filterUndefinedObjects(DonHang) || [],
-          KhachHang: this.filterUndefinedObjects(KhachHang) || [],
-          SanPham: this.filterUndefinedObjects(SanPham) || [],
+          Customer: this.filterUndefinedObjects(Customer) || [],
+          //KhachHang: this.filterUndefinedObjects(KhachHang) || [],
+          Product: this.filterUndefinedObjects(Product) || [],
           loading: false
         })
     })
@@ -58,11 +58,11 @@ class HomePage extends Component {
   renderContent = () => {
     switch(this.state.currentNav) {
       case 'dh':
-        return <DonHang dsDonHang={this.state.DonHang} listKhachHang={this.state.KhachHang} getLatestData={this.getLatestData}/>;
+        return <div>DH</div>//<DonHang dsDonHang={this.state.DonHang} listKhachHang={this.state.KhachHang} getLatestData={this.getLatestData}/>;
       case 'kh':
-        return <KhachHang dsKhachHang={this.state.KhachHang} getLatestData={this.getLatestData}/>;
+        return <div>KH</div>//<KhachHang dsKhachHang={this.state.KhachHang} getLatestData={this.getLatestData}/>;
       case 'sp':
-        return <SanPham dsSanPham={this.state.SanPham} getLatestData={this.getLatestData}/>;
+        return <SanPham dsSanPham={this.state.Product} getLatestData={this.getLatestData}/>;
       default:
         break;
     }
@@ -96,7 +96,7 @@ class HomePage extends Component {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}> 
-          Sales Management ©2018 Created by L
+          4Rent ©2020 Created by Luan Vuong
         </Footer>
   </Layout>
     );

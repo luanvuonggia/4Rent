@@ -6,7 +6,7 @@ const prodConfig = {
     authDomain: "rent-1cbb7.firebaseapp.com",
     databaseURL: "https://rent-1cbb7.firebaseio.com",
     projectId: "rent-1cbb7",
-    //storageBucket: "hoanapp.appspot.com",
+    storageBucket: "rent-1cbb7.appspot.com",
     //messagingSenderId: "1072748217375"
 };
 
@@ -15,7 +15,7 @@ const devConfig = {
     authDomain: "rent-1cbb7.firebaseapp.com",
     databaseURL: "https://rent-1cbb7.firebaseio.com",
     projectId: "rent-1cbb7",
-    //storageBucket: "hoanapp.appspot.com",
+    storageBucket: "rent-1cbb7.appspot.com",
     //messagingSenderId: "1072748217375"
 };
 
