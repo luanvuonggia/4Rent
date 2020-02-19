@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Table, message, Button, Divider, Popconfirm, Tag } from 'antd';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
-import SanPhamForm from '../Form/SanPhamForm'
+import ProductForm from '../Form/ProductForm'
 
 const success = () => {
   message.success('Thành công')
 };
 
-class SanPham extends Component {
+class Product extends Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -17,11 +17,11 @@ class SanPham extends Component {
   }
 
   columns = [{
-  title: 'Tên SP',
+  title: 'Name',
   dataIndex: 'name',
   key: 'name',
 }, {
-  title: 'Giá Thuê',
+  title: 'Price',
   dataIndex: 'price',
   key: 'price',
 },  {
@@ -38,9 +38,9 @@ class SanPham extends Component {
   key: 'action',
   render: (text, record) => (
     <span>
-      <a onClick={()=>this.onUpdate(record.maSP)}>Cập Nhật</a>
-      <Divider type="vertical" />
-      <Popconfirm title="Bạn muốn xóa sản phẩm này?" onConfirm={() => this.onDelete(record.maSP)} okText="Đồng ý" cancelText="Hủy">
+      <a onClick={()=>this.onUpdate(record.maSP)}>Update</a>
+      <Divider type='vertical' />
+      <Popconfirm title='Delete this product?' onConfirm={() => this.onDelete(record.maSP)} okText='Ok' cancelText='Cancel'>
       <a>Xóa</a>
       </Popconfirm>
     </span>
@@ -53,14 +53,14 @@ class SanPham extends Component {
   }
 
   onDelete = (maSP) => {
-    firebase.update(`SanPham/${maSP}`, null);
+    firebase.update(`Product/${maSP}`, null);
     this.props.getLatestData();
   }
 
   onUpdate = (maSP) => {
     this.setState({
       isEdit: true,
-      SanPhamEdit: _.find(this.props.dsSanPham, ['maSP', maSP])
+      ProductEdit: _.find(this.props.dsProduct, ['maSP', maSP])
     }, () => {
       this.setState({
         visible: true
@@ -75,7 +75,7 @@ class SanPham extends Component {
           return;
         }
         form.resetFields();
-        firebase.getLastIndex('SanPham').then((lastIndex) => this.addSanPham(lastIndex, values))
+        firebase.getLastIndex('Product').then((lastIndex) => this.addProduct(lastIndex, values))
         success()
         this.setState({
           visible: false,
@@ -83,17 +83,17 @@ class SanPham extends Component {
       });
   }
 
-  addSanPham = (lastIndex, values) => {
+  addProduct = (lastIndex, values) => {
       let newIndex = parseInt(lastIndex) + 1;
       if(this.state.isEdit) {
-        newIndex = this.state.SanPhamEdit.maSP;
+        newIndex = this.state.ProductEdit.maSP;
       }
-      let newSanPham = {
-        maSP: newIndex,    
-        tenSP: values.ten,
-        gia: values.gia,
+      let newProduct = {   
+        name: values.name,
+        price: values.price,
+        available: true
       }
-      firebase.update(`SanPham/${newIndex}`, newSanPham);
+      firebase.update(`Product/${newIndex}`, newProduct);
       this.props.getLatestData();
   }
 
@@ -103,10 +103,18 @@ class SanPham extends Component {
       this.setState({
         visible: false,
         isEdit: false,
-        SanPhamEdit: {}
+        ProductEdit: {}
       });
 
   }
+
+
+  checkPrice = (rule, value, callback) => {
+    if (value.number > 0) {
+      return callback();
+    }
+    callback('Price must greater than zero!');
+  };
 
   saveFormRef = (form) => {
       this.form = form;
@@ -114,20 +122,21 @@ class SanPham extends Component {
   render() {
     return (      
         <div>
-        <SanPhamForm
+        <ProductForm
                 ref={this.saveFormRef}
                 visible={this.state.visible}
                 onCancel={this.onCancel}
                 onCreate={this.onCreate}
                 isEdit={this.state.isEdit}
-                SanPhamEdit={this.state.SanPhamEdit}
+                ProductEdit={this.state.ProductEdit}
+                checkPrice={this.checkPrice}
         />
-        <Button type='primary' onClick={this.showModal}>Thêm Sản Phẩm</Button> 
-        <Table dataSource={this.props.dsSanPham} columns={this.columns} />
+        <Button type='primary' onClick={this.showModal}>Add Product</Button> 
+        <Table dataSource={this.props.dsProduct} columns={this.columns} />
       </div>
     );
   }
 }
 
 
-export default SanPham;
+export default Product;

@@ -6,7 +6,7 @@ import withAuthorization from '../Session/withAuthorization';
 import { db, firebase } from '../../firebase';
 import DonHang from '../Management/DonHang'
 import KhachHang from '../Management/KhachHang'
-import SanPham from '../Management/SanPham'
+import Product from '../Management/Product'
 import _ from 'lodash';
 
 const { Header, Content, Footer } = Layout;
@@ -62,7 +62,7 @@ class HomePage extends Component {
       case 'kh':
         return <div>KH</div>//<KhachHang dsKhachHang={this.state.KhachHang} getLatestData={this.getLatestData}/>;
       case 'sp':
-        return <SanPham dsSanPham={this.state.Product} getLatestData={this.getLatestData}/>;
+        return <Product dsProduct={this.state.Product} getLatestData={this.getLatestData}/>;
       default:
         break;
     }

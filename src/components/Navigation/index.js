@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
+import logo from '../../img/icon.ico';
 
 import SignOutButton from '../SignOut';
 import * as routes from '../../constants/routes';
@@ -16,9 +17,9 @@ const Navigation = ({ sessionStore }) =>
 
 const NavigationAuth = () =>
   <ul>
-    <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.HOME}>Home</Link></li>
-    <li><Link to={routes.ACCOUNT}>Account</Link></li>
+    <li><Link to={routes.HOME}>Home<image src={logo}/></Link></li>
+    {/* <li><Link to={routes.LANDING}>Landing</Link></li>
+    <li><Link to={routes.ACCOUNT}>Account</Link></li> */}
     <li><SignOutButton /></li>
   </ul>
 
