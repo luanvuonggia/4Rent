@@ -4,9 +4,9 @@ import { compose } from 'recompose';
 import { Layout, Menu, Breadcrumb, Button, Table, Spin } from 'antd';
 import withAuthorization from '../Session/withAuthorization';
 import { db, firebase } from '../../firebase';
-import DonHang from '../Management/DonHang'
-import KhachHang from '../Management/KhachHang'
 import Product from '../Management/Product'
+import Order from '../Management/Order'
+import Customer from '../Management/Customer'
 import _ from 'lodash';
 
 const { Header, Content, Footer } = Layout;
@@ -16,7 +16,7 @@ class HomePage extends Component {
       super(props);
       this.state = {
         dsDonHang: [],
-        currentNav: 'dh',
+        currentNav: 'sp',
         loading: true
       }
   }
@@ -37,12 +37,12 @@ class HomePage extends Component {
   getLatestData = () => {
     Promise.all([
       firebase.getData('Customer'),
-      //firebase.getData('KhachHang'),
+      firebase.getData('Order'),
       firebase.getData('Product')]
-      ).then(([Customer, Product]) => {
+      ).then(([Customer, Order, Product]) => {
         this.setState({
           Customer: this.filterUndefinedObjects(Customer) || [],
-          //KhachHang: this.filterUndefinedObjects(KhachHang) || [],
+          Order: this.filterUndefinedObjects(Order) || [],
           Product: this.filterUndefinedObjects(Product) || [],
           loading: false
         })
@@ -58,9 +58,9 @@ class HomePage extends Component {
   renderContent = () => {
     switch(this.state.currentNav) {
       case 'dh':
-        return <div>DH</div>//<DonHang dsDonHang={this.state.DonHang} listKhachHang={this.state.KhachHang} getLatestData={this.getLatestData}/>;
+        return <Order orders={this.state.Order} customers={this.state.Customer} getLatestData={this.getLatestData}/>;
       case 'kh':
-        return <div>KH</div>//<KhachHang dsKhachHang={this.state.KhachHang} getLatestData={this.getLatestData}/>;
+        return <Customer Customers={this.state.Customer} getLatestData={this.getLatestData}/>;
       case 'sp':
         return <Product dsProduct={this.state.Product} getLatestData={this.getLatestData}/>;
       default:
@@ -79,13 +79,14 @@ class HomePage extends Component {
           <Menu
             theme='dark'
             mode='horizontal'
-            defaultSelectedKeys={['dh']}
+            defaultSelectedKeys={['sp']}
             style={{ lineHeight: '64px' }}
             onClick={this.onChangeNav}
           >
-            <Menu.Item key='dh'>Đơn Hàng</Menu.Item>
-            <Menu.Item key='sp'>Sản Phẩm</Menu.Item>
-            <Menu.Item key='kh'>Khách Hàng</Menu.Item>
+            
+            <Menu.Item key='sp'>Products</Menu.Item>
+            <Menu.Item key='kh'>Customer</Menu.Item>
+            <Menu.Item key='dh'>Orders</Menu.Item>
           </Menu>
         </Header>
         <Content style={{ padding: '0 50px' }}>

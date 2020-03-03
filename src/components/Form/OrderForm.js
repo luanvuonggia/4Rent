@@ -19,13 +19,13 @@ const DonHangForm = Form.create()(
         <Form layout='vertical'>
           <Row type='flex' justify='center' style={{ height: '100%' }}>  
           <FormItem label='Tên'>
-            {getFieldDecorator('khachHang', {initialValue: isEdit? DonHangEdit.maKH : null }, {
+            {getFieldDecorator('khachHang', {initialValue: isEdit? DonHangEdit.cusID : null }, {
               rules: [{ required: true, message: 'Chọn một khách hàng!' }]})(
               <Select style={{ width: 420 }}
                 showSearch
               >
                 {
-                  _.map(listKhachHang, (khach) => <Option value={khach.maKH}>{khach.ten}</Option>)
+                  _.map(listKhachHang, (khach) => <Option value={khach.cusID}>{khach.ten}</Option>)
                 }
               </Select>
             )}

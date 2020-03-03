@@ -5,7 +5,7 @@ import _ from 'lodash';
 import ProductForm from '../Form/ProductForm'
 
 const success = () => {
-  message.success('Thành công')
+  message.success('Success!')
 };
 
 class Product extends Component {
@@ -38,10 +38,10 @@ class Product extends Component {
   key: 'action',
   render: (text, record) => (
     <span>
-      <a onClick={()=>this.onUpdate(record.maSP)}>Update</a>
+      <a onClick={()=>this.onUpdate(record.productID)}>Update</a>
       <Divider type='vertical' />
-      <Popconfirm title='Delete this product?' onConfirm={() => this.onDelete(record.maSP)} okText='Ok' cancelText='Cancel'>
-      <a>Xóa</a>
+      <Popconfirm title='Delete this product?' onConfirm={() => this.onDelete(record.productID)} okText='Ok' cancelText='Cancel'>
+      <a>Delete</a>
       </Popconfirm>
     </span>
   )}];
@@ -52,15 +52,15 @@ class Product extends Component {
     });
   }
 
-  onDelete = (maSP) => {
-    firebase.update(`Product/${maSP}`, null);
+  onDelete = (productID) => {
+    firebase.update(`Product/${productID}`, null);
     this.props.getLatestData();
   }
 
-  onUpdate = (maSP) => {
+  onUpdate = (productID) => {
     this.setState({
       isEdit: true,
-      ProductEdit: _.find(this.props.dsProduct, ['maSP', maSP])
+      ProductEdit: _.find(this.props.dsProduct, ['productID', productID])
     }, () => {
       this.setState({
         visible: true
@@ -86,12 +86,13 @@ class Product extends Component {
   addProduct = (lastIndex, values) => {
       let newIndex = parseInt(lastIndex) + 1;
       if(this.state.isEdit) {
-        newIndex = this.state.ProductEdit.maSP;
+        newIndex = this.state.ProductEdit.productID;
       }
       let newProduct = {   
         name: values.name,
         price: values.price,
-        available: true
+        available: true,
+        productID: newIndex
       }
       firebase.update(`Product/${newIndex}`, newProduct);
       this.props.getLatestData();
@@ -112,6 +113,9 @@ class Product extends Component {
   checkPrice = (rule, value, callback) => {
     if (value.number > 0) {
       return callback();
+    }
+    if (_.isNumber(value.number)) {
+      callback('Invalid number!');
     }
     callback('Price must greater than zero!');
   };

@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Table, Button, message, Divider, Popconfirm } from 'antd';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
-import KhachHangForm from '../Form/KhachHangForm';
+import CustomerForm from '../Form/CustomerForm';
 
 const success = () => {
-  message.success('Thành công')
+  message.success('Success')
 };
 
 
-class DonHang extends Component {
+class Customer extends Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -18,19 +18,15 @@ class DonHang extends Component {
   }
 
   columns = [{
-  title: 'Mã Khách Hàng',
-  dataIndex: 'maKH',
-  key: 'maKH',
+  title: 'Name',
+  dataIndex: 'name',
+  key: 'name',
 }, {
-  title: 'Tên KH',
-  dataIndex: 'ten',
-  key: 'ten',
-}, {
-  title: 'SĐT',
-  dataIndex: 'sdt',
-  key: 'sdt',
+  title: 'Phone',
+  dataIndex: 'phone',
+  key: 'phone',
 } , {
-  title: 'Ghi Chú',
+  title: 'Note',
   dataIndex: 'note',
   key: 'note',
 }, {
@@ -38,10 +34,10 @@ class DonHang extends Component {
   key: 'action',
   render: (text, record) => (
     <span>
-      <a onClick={()=>this.onUpdate(record.maKH)}>Cập Nhật</a>
-      <Divider type="vertical" />
-      <Popconfirm title="Bạn muốn xóa khách hàng này?" onConfirm={() => this.onDelete(record.maKH)} okText="Đồng ý" cancelText="Hủy">
-      <a>Xóa</a>
+      <a onClick={()=>this.onUpdate(record.cusID)}>Update</a>
+      <Divider type='vertical' />
+      <Popconfirm title='Delete?' onConfirm={() => this.onDelete(record.cusID)} okText='Ok' cancelText='Cancel'>
+      <a>Delete</a>
       </Popconfirm>
     </span>
   )}];
@@ -53,15 +49,15 @@ class DonHang extends Component {
     });
   }
 
-  onDelete = (maKH) => {
-    firebase.update(`KhachHang/${maKH}`, null);
+  onDelete = (cusID) => {
+    firebase.update(`Customer/${cusID}`, null);
     this.props.getLatestData();
   }
 
-  onUpdate = (maKH) => {
+  onUpdate = (cusID) => {
     this.setState({
       isEdit: true,
-      KhachHangEdit: _.find(this.props.dsKhachHang, ['maKH', maKH])
+      cusEdit: _.find(this.props.Customers, ['cusID', cusID])
     }, () => {
       this.setState({
         visible: true
@@ -76,7 +72,7 @@ class DonHang extends Component {
           return;
         }
         form.resetFields();
-        firebase.getLastIndex('KhachHang').then((lastIndex) => this.addKhachHang(lastIndex, values))
+        firebase.getLastIndex('Customer').then((lastIndex) => this.addCustomer(lastIndex, values))
         success()
         this.setState({
           visible: false,
@@ -84,18 +80,18 @@ class DonHang extends Component {
       });
   }
 
-  addKhachHang = (lastIndex, values) => {
-      let newIndex = parseInt(lastIndex) + 1;
+  addCustomer = (lastIndex, values) => {
+      let newIndex = parseInt(lastIndex) + 1;;
       if(this.state.isEdit) {
-        newIndex = this.state.KhachHangEdit.maKH;
+        newIndex = this.state.cusEdit.cusID;
       }
-      let newKhachHang = {
-        maKH: newIndex,    
-        ten: values.ten,
-        sdt: values.sdt || '',
+      let newCustomer= {
+        cusID: newIndex,    
+        name: values.name,
+        phone: values.phone || '',
         note: values.note || ''
       }
-      firebase.update(`KhachHang/${newIndex}`, newKhachHang);
+      firebase.update(`Customer/${newIndex}`, newCustomer);
       this.props.getLatestData();
   }
 
@@ -105,7 +101,7 @@ class DonHang extends Component {
       this.setState({
         visible: false,
         isEdit: false,
-        KhachHangEdit: {}
+        cusEdit: {}
       });
 
   }
@@ -117,20 +113,20 @@ class DonHang extends Component {
   render() {
     return (
       <div>
-        <KhachHangForm
+        <CustomerForm
                 ref={this.saveFormRef}
                 visible={this.state.visible}
                 onCancel={this.onCancel}
                 onCreate={this.onCreate}
                 isEdit={this.state.isEdit}
-                KhachHangEdit={this.state.KhachHangEdit}
+                cusEdit={this.state.cusEdit}
         />
-        <Button type='primary' onClick={this.showModal}>Thêm Khách Hàng</Button> 
-        <Table dataSource={this.props.dsKhachHang} columns={this.columns} />
+        <Button type='primary' onClick={this.showModal}>Add new</Button> 
+        <Table dataSource={this.props.Customers} columns={this.columns} />
       </div>
     );
   }
 }
 
 
-export default DonHang;
+export default Customer;

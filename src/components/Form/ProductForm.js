@@ -1,46 +1,17 @@
-import { Form, Icon, Input, Button, Modal, Switch, Select, InputNumber, Col, Row} from 'antd';
+import { Form, Input, Modal, InputNumber, Row} from 'antd';
 import React, { Component } from 'react';
 import _ from 'lodash';
 const FormItem = Form.Item;
-class PriceInput extends React.Component {
-  handleNumberChange = e => {
-    const number = parseInt(e.target.value || 0, 10);
-    if (isNaN(number)) {
-      return;
-    }
-    this.triggerChange({ number });
-  };
-
-  triggerChange = changedValue => {
-    const { onChange, value } = this.props;
-    if (onChange) {
-      onChange({
-        ...value,
-        ...changedValue,
-      });
-    }
-  };
-
-  render() {
-    const { size, value } = this.props;
-    return (
-      <span>
-        <Input
-          type='text'
-          size={size}
-          value={value.number}
-          onChange={this.handleNumberChange}
-          style={{ width: '65%', marginRight: '3%' }}
-        />
-      </span>
-    );
-  }
-}
 const ProductForm = Form.create()(
   (props) => {
     const { visible, onCancel, onCreate, form, isEdit, ProductEdit, checkPrice} = props;
     const { getFieldDecorator } = form;
-  
+    const handleNumberChange = (e) => {
+      const number = _.toNumber(e);
+      if (!_.isNumber(number)) {
+        return;
+      }
+    }
     return (
       <Modal
         visible={visible}
@@ -62,7 +33,11 @@ const ProductForm = Form.create()(
           <FormItem>
             {getFieldDecorator('price', { initialValue: isEdit? ProductEdit.price : 0 },{
               rules: [{ validator: checkPrice }]})(
-                <PriceInput />
+                <InputNumber 
+                placeholder='Input product price'
+                style={{ width: 420 }}
+                onChange={handleNumberChange}
+                />
             )}
           </FormItem>
           </Row>
