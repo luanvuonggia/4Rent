@@ -2,7 +2,7 @@ import { Form, Input, Modal, InputNumber, Row} from 'antd';
 import React, { Component } from 'react';
 import _ from 'lodash';
 const FormItem = Form.Item;
-const ProductForm = Form.create()(
+const ProductForm = () => (
   (props) => {
     const { visible, onCancel, onCreate, form, isEdit, ProductEdit, checkPrice} = props;
     const { getFieldDecorator } = form;

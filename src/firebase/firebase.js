@@ -1,7 +1,7 @@
-import * as firebase from 'firebase';
+import FireBase from 'firebase';
 import _ from 'lodash';
 
-const prodConfig = {
+const config = {
     apiKey: "AIzaSyDXVflcVTgPa1mXlFO89CQOLs-r-akhvaM",
     authDomain: "rent-1cbb7.firebaseapp.com",
     databaseURL: "https://rent-1cbb7.firebaseio.com",
@@ -10,23 +10,12 @@ const prodConfig = {
     //messagingSenderId: "1072748217375"
 };
 
-const devConfig = {
-    apiKey: "AIzaSyDXVflcVTgPa1mXlFO89CQOLs-r-akhvaM",
-    authDomain: "rent-1cbb7.firebaseapp.com",
-    databaseURL: "https://rent-1cbb7.firebaseio.com",
-    projectId: "rent-1cbb7",
-    storageBucket: "rent-1cbb7.appspot.com",
-    //messagingSenderId: "1072748217375"
-};
 
-const config = process.env.NODE_ENV === 'production'
-    ? prodConfig
-    : devConfig;
-
-if (! firebase.apps.length) {
-    firebase.initializeApp(config);
-}
-
+   
+// if (! firebase.apps.length) {
+//     firebase.initializeApp(config);
+// }
+const firebase = FireBase.initializeApp(config); 
 const db = firebase.database();
 const auth = firebase.auth();
 const getData = (part) => db.ref(part).once('value').then((snapshot) => snapshot.val());
@@ -36,11 +25,13 @@ const getLastIndex = (part) => {
      return _.last(Object.keys(data))
    })
  }
+ 
 
 export {
     db,
     auth,
     getData,
     update,
-    getLastIndex
+    getLastIndex,
+    firebase
 };

@@ -57,11 +57,9 @@ constructor(props) {
   key: 'action',
   render: (text, record) => (
     <span>
-      <Router>
-        <Route path='/order-details'>
-          <OrderDetails />
-        </Route>
-      </Router>
+      <Link to='/add-order'> 
+      <a>Details</a>
+      </Link>
 
       
       <Divider type="vertical" />
@@ -76,62 +74,6 @@ constructor(props) {
     firebase.update(`Order/${id}`, null);
     this.props.getLatestData();
   }
-
-  // onUpdate = (maDH) => {
-  //   this.setState({
-  //     isEdit: true,
-  //     DonHangEdit: _.find(this.props.dsDonHang, ['maDH', maDH])
-  //   }, () => {
-  //     this.setState({
-  //       visible: true
-  //     })
-  //   })
-  // }
-
-  // onCreate = () => {
-  //   const form = this.form;
-  //     form.validateFields((err, values) => {
-  //       if (err) {
-  //         return;
-  //       }
-  //       form.resetFields();     
-  //       firebase.getLastIndex('DonHang').then((lastIndex) => this.addDonHang(lastIndex, values))
-  //       success()
-  //       this.setState({
-  //         visible: false,
-  //       });
-  //     });
-  // }
-
-  // addDonHang = (lastIndex, values) => {
-
-  //     let newIndex = parseInt(lastIndex) + 1
-  //     if(this.state.isEdit) {
-  //       newIndex = this.state.DonHangEdit.maDH
-  //     }
-  //     let newDonHang = {
-  //       maDH: newIndex,    
-  //       cusID: values.khachHang || 0,
-  //       noBanDau: values.noBanDau || 0,
-  //       conNo: values.conNo || values.noBanDau || 0,
-  //       tongTien: values.tongTien || 0,
-  //       ngayGio: Date.now(),
-  //       note: values.note || ''
-  //     }
-  //     firebase.update(`DonHang/${newIndex}`, newDonHang);
-  //     this.props.getLatestData();
-  // }
-
-  // onCancel = (e) => {
-  //     const form = this.form;
-  //     form.resetFields();
-  //     this.setState({
-  //       visible: false,
-  //       isEdit: false,
-  //       DonHangEdit: {}
-  //     });
-
-  // }
 
   render() {
     return ( 

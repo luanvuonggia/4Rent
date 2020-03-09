@@ -19,7 +19,7 @@ import 'antd/dist/antd.css'
 
 const App = () =>
   <Router>
-    <div className="app">
+    <div className='app'>
       <Navigation />
       <Route exact path={routes.LANDING} component={() => <LandingPage />} />
       <Route exact path={routes.SIGN_UP} component={() => <SignUpPage />} />

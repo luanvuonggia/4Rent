@@ -1,45 +1,89 @@
 import { Form,Input, Modal, Row} from 'antd';
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import _ from 'lodash';
 const FormItem = Form.Item;
-const KhachHangForm = Form.create()(
-  (props) => {
-    const { visible, onCancel, onCreate, form, isEdit, cusEdit } = props;
-    const { getFieldDecorator } = form;
+const CustomerForm = ({visible, onCancel, onCreate, isEdit, cusEdit}) => {
+    const [form] = Form.useForm();
+    useEffect(() => {
+      if(cusEdit !== null)
+      form.setFieldsValue({
+        name: cusEdit.name,
+        phone: cusEdit.phone,
+        note: cusEdit.note
+      });
+      if(!isEdit)
+      {
+        form.resetFields();
+      }
+    }, [cusEdit]);
     return (
       <Modal
         visible={visible}
         title={ isEdit ? 'Edit' : 'Add New'}
         okText={ isEdit ? 'Update' : 'Add' }
-        onCancel={onCancel}
-        onOk={onCreate}
+        onCancel={()=>{
+          form.resetFields()
+          onCancel()}}
+        onOk={() => {
+          form
+            .validateFields()
+            .then(values => {
+              form.resetFields();
+              onCreate(values);
+            })
+            .catch(info => {
+              console.log('Validate Failed:', info);
+            });
+        }}
       >
-        <Form layout="vertical">
+        <Form 
+          form={form} 
+          layout='vertical'
+          name='customer_form'
+          initialValues={ isEdit? {
+            name: cusEdit.name,
+            phone: cusEdit.phone,
+            note: cusEdit.note
+          } : {}}
+        >
           <Row type='flex' justify='center' style={{ height: '100%' }}>  
-          <FormItem>
-            {getFieldDecorator('name', { initialValue: isEdit? cusEdit.name : null },{
-              rules: [{ required: true, message: 'Name is required!' }]})(
-              <Input placeholder='Customer name' style={{ width: 420 }} />
-            )}
+          <FormItem
+              name="name"
+              label="Name"
+              rules={[
+                {
+                required: true,
+                message: 'Please input name!',
+                },
+              ]}
+          >            
+          <Input placeholder='Customer name' style={{ width: 420 }} />
           </FormItem>
           </Row>
           <Row type='flex' justify='center' style={{ height: '100%' }}>  
-          <FormItem>
-            {getFieldDecorator('phone', { initialValue: isEdit? cusEdit.phone : null })(
-              <Input placeholder='phone number' style={{ width: 420 }} />
-            )}
+          <FormItem
+              name="phone"
+              label="Phone"
+              rules={[
+                {
+                required: true,
+                message: 'Please input phone!',
+                },
+              ]}
+          >            
+          <Input placeholder='Phone number' style={{ width: 420 }} />
           </FormItem>
           </Row>
           <Row type='flex' justify='center' style={{ height: '100%' }}>  
-          <FormItem>
-            {getFieldDecorator('note', { initialValue: isEdit? cusEdit.note : null })(
-              <Input placeholder='Note' style={{ width: 420 }} />
-            )}
+          <FormItem
+              name="note"
+              label="Note"
+          >            
+          <Input type="textarea" style={{ width: 420 }} />
           </FormItem>
           </Row>
         </Form>
       </Modal>
     );
-  }
-);
-export default KhachHangForm
+}
+export default CustomerForm
