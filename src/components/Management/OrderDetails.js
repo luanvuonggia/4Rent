@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Form, Icon, Input, Button, Popconfirm, Table, Select, InputNumber, Col, Row} from 'antd';
 import _ from 'lodash';
-import { firebase } from '../../firebase/firebase';
+import { firebase, getData } from '../../firebase/firebase';
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 const tailLayout = {
@@ -93,6 +93,8 @@ const EditableCell = ({
 
 const OrderDetails = () =>  {
   const utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+  const [customers, setCustomers] = useState([]);
+  const [products, setProducts] = useState(null);
   const [cusID, setCusId] = useState('');
   const [id, setId] = useState('');
   const [note, setNote] = useState('');
@@ -111,8 +113,18 @@ const OrderDetails = () =>  {
     age: "32",
     address: "London, Park Lane no. 1"
   }]);
-  const formRef = React.createRef();
 
+  useEffect(() => {
+    Promise.all([
+      getData('Customer'),
+      getData('Order'),
+      getData('Product')]
+      ).then(([customers, orders, products]) => {
+        setCustomers(customers);
+        setProducts(products);
+        console.log('get data from firebase')
+    })
+  }, []);
   const handleDelete = key => { 
     const data = [...dataSource];
     setDataSource(data.filter(item => item.key !== key));
@@ -220,25 +232,26 @@ const OrderDetails = () =>  {
             <Select
               placeholder='Select a Customer'
               onChange={this.onCustomerChange}
-              allowClear
               onChange={(value) => setCusId(value)}
               style={{ width: 400 }}
             >
-              <Select.Option value='cus1'>Cus 1</Select.Option>
-              <Select.Option value='cus2'>Cus 2</Select.Option>
+              {
+                _.map(customers, cus=> <Select.Option value={cus.cusID}>{cus.name}</Select.Option> )
+              }
             </Select>
             </FormItem>
           </Row>
-          <Row type='flex' justify='center' style={{ height: '100%' }}>  
+          <Row type='flex' justify='left' style={{ height: '100%' }}>  
             <Table
             components={components}
             rowClassName={() => 'editable-row'}
             bordered
             dataSource={dataSource}
             columns={columns}
+            style={{ width: 1000 }}
             />
           </Row>
-          <Row type='flex' justify='center' style={{ height: '100%' }}>  
+          <Row type='flex' justify='left' style={{ height: '100%' }}>  
               <Button
               onClick={handleAdd}
               type="primary"
@@ -249,7 +262,7 @@ const OrderDetails = () =>  {
               Add a row
             </Button>
           </Row>
-          <Row type='flex' justify='center' style={{ height: '100%' }}>  
+          <Row type='flex' justify='left' style={{ height: '100%' }}>  
             <FormItem>
                 <Input placeholder='Note' style={{ width: 420 }}
                   onChange={(e) => setNote(e.target.value)}

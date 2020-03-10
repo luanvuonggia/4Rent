@@ -39,12 +39,7 @@ const CustomerForm = ({visible, onCancel, onCreate, isEdit, cusEdit}) => {
         <Form 
           form={form} 
           layout='vertical'
-          name='customer_form'
-          initialValues={ isEdit? {
-            name: cusEdit.name,
-            phone: cusEdit.phone,
-            note: cusEdit.note
-          } : {}}
+          name='customer_form'        
         >
           <Row type='flex' justify='center' style={{ height: '100%' }}>  
           <FormItem

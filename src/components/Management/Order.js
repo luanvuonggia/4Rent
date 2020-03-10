@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Table, Button, Divider, Row, Col, message, Popconfirm} from 'antd';
+import { PlusCircleOutlined, DownloadOutlined  } from '@ant-design/icons';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
-import OrderDetails from './OrderDetails';
 
 import {
   BrowserRouter as Router,
@@ -10,9 +10,9 @@ import {
   Route,
 } from "react-router-dom";
 
-const success = () => {
-  message.success('Success!')
-};
+// const success = () => {
+//   message.success('Success!')
+// };
 
 
 class Order extends Component {
@@ -81,11 +81,11 @@ constructor(props) {
         <Row type='flex' justify='space-between' style={{ height: '100%' }}>
         <Col> 
           <Link to='/add-order'>
-          <Button type='primary' icon='plus-circle-o'>Add</Button>
+          <Button type='primary' icon={<PlusCircleOutlined/>}>Add</Button>
           </Link>
         </Col>
         <Col>
-          <Button type='primary' icon='file-excel'>Export</Button>
+          <Button type='primary' icon={<DownloadOutlined />}>Export</Button>
         </Col>
         </Row>
         <Table dataSource={this.props.orders} columns={this.columns} pagination={false} />

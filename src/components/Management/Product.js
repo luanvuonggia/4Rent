@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Table, message, Button, Divider, Popconfirm, Tag } from 'antd';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
@@ -8,15 +8,11 @@ const success = () => {
   message.success('Success!')
 };
 
-class Product extends Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-        visible: false
-      }
-  }
-
-  columns = [{
+const Product = props => {
+  const [visible, setVisible] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [productEdit, setProductEdit] = useState(null);
+  const columns = [{
   title: 'Name',
   dataIndex: 'name',
   key: 'name',
@@ -25,121 +21,89 @@ class Product extends Component {
   dataIndex: 'price',
   key: 'price',
 },  {
-  title: 'Available',
-  dataIndex: 'available',
-  key: 'available',
-  render: available => (
-    <Tag color={available? 'green' : 'red'}>
-        {_.toString(available)}
-    </Tag>
-  )
+  title: 'In Stock',
+  dataIndex: 'inStock',
+  key: 'inStock',
+  // render: available => (
+  //   <Tag color={available? 'green' : 'red'}>
+  //       {_.toString(available)}
+  //   </Tag>
+  // )
 }, {
   title: 'Action',
   key: 'action',
   render: (text, record) => (
     <span>
-      <a onClick={()=>this.onUpdate(record.productID)}>Update</a>
+      <a onClick={()=>onUpdate(record.productID)}>Update</a>
       <Divider type='vertical' />
-      <Popconfirm title='Delete this product?' onConfirm={() => this.onDelete(record.productID)} okText='Ok' cancelText='Cancel'>
+      <Popconfirm title='Delete this product?' onConfirm={() => onDelete(record.productID)} okText='Ok' cancelText='Cancel'>
       <a>Delete</a>
       </Popconfirm>
     </span>
   )}];
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
+  const showModal = () => {
+    setVisible(true);
   }
 
-  onDelete = (productID) => {
+  const onDelete = (productID) => {
     firebase.update(`Product/${productID}`, null);
-    this.props.getLatestData();
+    props.getLatestData();
   }
 
-  onUpdate = (productID) => {
-    this.setState({
-      isEdit: true,
-      ProductEdit: _.find(this.props.dsProduct, ['productID', productID])
-    }, () => {
-      this.setState({
-        visible: true
-      })
-    })
+  const onUpdate = (productID) => {
+    setIsEdit(true);
+    setProductEdit(_.find(props.dsProduct, ['productID', productID]));
+    setVisible(true);
+    
   }
 
-  onCreate = () => {
-    const form = this.form;
-      form.validateFields((err, values) => {
-        if (err) {
-          return;
-        }
-        form.resetFields();
-        firebase.getLastIndex('Product').then((lastIndex) => this.addProduct(lastIndex, values))
+  const onCreate = (values) => {
+  
+        firebase.getLastIndex('Product').then((lastIndex) => addProduct(lastIndex, values))
         success()
-        this.setState({
-          visible: false,
-        });
-      });
+        setVisible(false);
+
   }
 
-  addProduct = (lastIndex, values) => {
+  const addProduct = (lastIndex, values) => {
       let newIndex = parseInt(lastIndex) + 1;
-      if(this.state.isEdit) {
-        newIndex = this.state.ProductEdit.productID;
+      if(isEdit) {
+        newIndex = productEdit.productID;
       }
       let newProduct = {   
         name: values.name,
-        price: values.price,
-        available: true,
+        quantity: values.quantity,
+        inStock: values.quantity,
+        price: values.price.number,
+        status: 'create',
         productID: newIndex
       }
       firebase.update(`Product/${newIndex}`, newProduct);
-      this.props.getLatestData();
+      props.getLatestData();
   }
 
-  onCancel = (e) => {
-      const form = this.form;
-      form.resetFields();
-      this.setState({
-        visible: false,
-        isEdit: false,
-        ProductEdit: {}
-      });
+  const onCancel = (e) => {
+    setVisible(false);
+    setIsEdit(false);
+    setProductEdit(null);
 
   }
 
 
-  checkPrice = (rule, value, callback) => {
-    if (value.number > 0) {
-      return callback();
-    }
-    if (_.isNumber(value.number)) {
-      callback('Invalid number!');
-    }
-    callback('Price must greater than zero!');
-  };
-
-  saveFormRef = (form) => {
-      this.form = form;
-  }
-  render() {
     return (      
         <div>
         <ProductForm
-                ref={this.saveFormRef}
-                visible={this.state.visible}
-                onCancel={this.onCancel}
-                onCreate={this.onCreate}
-                isEdit={this.state.isEdit}
-                ProductEdit={this.state.ProductEdit}
-                checkPrice={this.checkPrice}
+                visible={visible}
+                onCancel={onCancel}
+                onCreate={onCreate}
+                isEdit={isEdit}
+                ProductEdit={productEdit}
         />
-        <Button type='primary' onClick={this.showModal}>Add Product</Button> 
-        <Table dataSource={this.props.dsProduct} columns={this.columns} />
+        <Button type='primary' onClick={showModal}>Add Product</Button> 
+        <Table dataSource={props.dsProduct} columns={columns} />
       </div>
     );
-  }
 }
 
 

@@ -22,7 +22,7 @@ const getData = (part) => db.ref(part).once('value').then((snapshot) => snapshot
 const update = (part, data) => db.ref().update({[part]: data});
 const getLastIndex = (part) => {
    return getData(part).then((data) => {
-     return _.last(Object.keys(data))
+     return (data && _.last(Object.keys(data))) || -1
    })
  }
  
