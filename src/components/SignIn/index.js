@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
+import { Row, Form, Input, Button, Checkbox} from 'antd';
 import { withRouter } from 'react-router-dom';
-
+import './Signin.css'
 import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { auth } from '../../firebase';
+import landing from '../../img/landing.jpg';
 import * as routes from '../../constants/routes';
 
 const SignInPage = ({ history }) =>
-  <div>
-    <h1>SignIn</h1>
-    <SignInForm history={history} />
-    <PasswordForgetLink />
-    <SignUpLink />
+  <div className="Signin" style={{backgroundImage: `url(${landing})` }}>
+    <div className="Signin-content">   
+      <h1 className='h1-content'>4 RENT</h1>
+      <h2 className='h2-content'>Sign in</h2>
+      <SignInForm history={history} />
+      <PasswordForgetLink />
+      <SignUpLink />
+    </div>
   </div>
 
 const updateByPropertyName = (propertyName, value) => () => ({
@@ -19,9 +24,15 @@ const updateByPropertyName = (propertyName, value) => () => ({
 });
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
   error: null,
+};
+
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
 };
 
 class SignInForm extends Component {
@@ -31,11 +42,15 @@ class SignInForm extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  onSubmit = (event) => {
+  onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+  };
+
+  onFinish = (values) => {
     const {
       email,
       password,
-    } = this.state;
+    } = values;
 
     const {
       history,
@@ -50,40 +65,46 @@ class SignInForm extends Component {
         this.setState(updateByPropertyName('error', error));
       });
 
-    event.preventDefault();
   }
 
   render() {
-    const {
-      email,
-      password,
-      error,
-    } = this.state;
-
-    const isInvalid =
-      password === '' ||
-      email === '';
-
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={password}
-          onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
+      <Form
+      {...layout}
+      name="basic"
+      initialValues={{ remember: true }}
+      onFinish={this.onFinish}
+      onFinishFailed={this.onFinishFailed}
+      style={{width:390}}
+    > 
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[{ required: true, message: 'Please input your email!' }]}
+      >
+        <Input />
+      </Form.Item>
 
-        { error && <p>{error.message}</p> }
-      </form>
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: 'Please input your password!' }]}
+      >
+        <Input.Password />
+      </Form.Item>
+    { this.state.error? 
+      <div className="error-mess">{this.state.error.message}</div> : null
+    }
+      <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+        <Checkbox>Remember me</Checkbox>
+      </Form.Item>
+
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
     );
   }
 }

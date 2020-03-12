@@ -2,32 +2,34 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
-import logo from '../../img/icon.ico';
-
+import logo from '../../img/4rent.png';
+import { Row, Col, Avatar} from 'antd';
 import SignOutButton from '../SignOut';
 import * as routes from '../../constants/routes';
 
 const Navigation = ({ sessionStore }) =>
   <div>
     { sessionStore.authUser
-        ? <NavigationAuth />
+        ? <NavigationAuth email={sessionStore.authUser.email} />
         : <NavigationNonAuth />
     }
   </div>
 
-const NavigationAuth = () =>
-  <ul>
-    <li><Link to={routes.HOME}>Home<image src={logo}/></Link></li>
-    {/* <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.ACCOUNT}>Account</Link></li> */}
-    <li><SignOutButton /></li>
-  </ul>
+const NavigationAuth = ({email}) =>
+    <Row justify="space-between" align="middle">
+      <Col span={6}><Link to={routes.HOME}><Avatar shape="square" size={64} src={logo} /></Link></Col>
+      <Col span={8}></Col>
+      <Col span={4}></Col>
+      <Col span={6}><div>{email}<SignOutButton /></div></Col>
+    </Row>
 
 const NavigationNonAuth = () =>
-  <ul>
-    <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.SIGN_IN}>Sign In</Link></li>
-  </ul>
+    <Row justify="space-between" align="middle">
+      <Col span={6}><Link to={routes.LANDING}><Avatar shape="square" size={64} src={logo} /></Link></Col>
+      <Col span={8}></Col>
+      <Col span={4}></Col>
+      <Col span={6}><Link to={routes.SIGN_IN}>Sign In</Link></Col>
+    </Row>
 
 export default compose(
   inject('sessionStore'),
