@@ -20,7 +20,7 @@ const NavigationAuth = ({email}) =>
       <Col span={6}><Link to={routes.HOME}><Avatar shape="square" size={64} src={logo} /></Link></Col>
       <Col span={8}></Col>
       <Col span={4}></Col>
-      <Col span={6}><div>{email}<SignOutButton /></div></Col>
+      <Col span={6}><div>{email+' '}<SignOutButton /></div></Col>
     </Row>
 
 const NavigationNonAuth = () =>

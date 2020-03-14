@@ -19,23 +19,23 @@ function LandingPage()  {
           </Col>
           <Col span={12}>
           <Menu 
-          onClick={handleClick} 
-          selectedKeys={[current]} 
-          mode="horizontal" 
-          style={{background: 'rgba(0, 0, 0, 0.05)', marginTop:-38}}>
+            onClick={handleClick} 
+            selectedKeys={[current]} 
+            mode="horizontal" 
+            style={{background: 'rgba(0, 0, 0, 0.05)', marginTop:-38}}>
           <Menu.Item key="home">    
-          Home
-        </Menu.Item>
-        <Menu.Item key="about">
-          About
-        </Menu.Item>
-        <Menu.Item key="contact">
-          Contact
-        </Menu.Item>
-        <Menu.Item key="blog">
-          Blog
-        </Menu.Item>
-      </Menu>
+             Home
+            </Menu.Item>
+            <Menu.Item key="about">
+              About
+            </Menu.Item>
+            <Menu.Item key="contact">
+              Contact
+            </Menu.Item>
+            <Menu.Item key="blog">
+              Blog
+            </Menu.Item>
+          </Menu>
           </Col>
         </Row>
         <Row>

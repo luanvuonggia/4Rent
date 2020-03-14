@@ -41,13 +41,9 @@ constructor(props) {
     </div>
   )
 }, {
-  title: 'Sumary',
-  dataIndex: 'sum',
-  key: 'sum',
-}, {
-  title: 'Note',
-  dataIndex: 'note',
-  key: 'note',
+  title: 'Total',
+  dataIndex: 'total',
+  key: 'total',
 }, {
   title: 'Date',
   dataIndex: 'date',
@@ -63,7 +59,7 @@ constructor(props) {
 
       
       <Divider type="vertical" />
-      <Popconfirm title="Delete?" onConfirm={() => this.onDelete(record.maDH)} okText="Yes" cancelText="Cancel">
+      <Popconfirm title="Delete?" onConfirm={() => this.onDelete(record.id)} okText="Yes" cancelText="Cancel">
       <a>Delete</a>
       </Popconfirm>
     </span>
