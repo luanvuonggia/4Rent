@@ -1,5 +1,5 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { connect } from 'react-redux'
 import { compose } from 'recompose';
 
 import { PasswordForgetForm } from '../PasswordForget';
@@ -14,9 +14,13 @@ const AccountPage = ({ sessionStore }) =>
   </div>
 
 const authCondition = (authUser) => !!authUser;
+const mapStateToProps = state => {
+  return {
+    sessionStore : state.sessionStore
+  }
+}
 
 export default compose(
   withAuthorization(authCondition),
-  inject('sessionStore'),
-  observer
+  connect(mapStateToProps, null),
 )(AccountPage);

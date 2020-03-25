@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'mobx-react';
+import { Provider } from 'react-redux'
 import './index.css';
 import App from './components/App';
-import store from './stores';
+import { createStore } from 'redux'
+import rootReducer from './reducers'
 import registerServiceWorker from './registerServiceWorker';
 
+const store = createStore(rootReducer)
+
 ReactDOM.render(
-  <Provider { ...store }>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root')
