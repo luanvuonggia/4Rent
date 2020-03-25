@@ -1,5 +1,5 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
 import logo from '../../img/4rent.png';
@@ -30,8 +30,11 @@ const NavigationNonAuth = () =>
       <Col span={4}></Col>
       <Col span={6}><Link to={routes.SIGN_IN}>Sign In</Link></Col>
     </Row>
-
+const mapStateToProps = state => {
+  return {
+    sessionStore : state.sessionStore
+  }
+}
 export default compose(
-  inject('sessionStore'),
-  observer
+  connect(mapStateToProps, null),
 )(Navigation);

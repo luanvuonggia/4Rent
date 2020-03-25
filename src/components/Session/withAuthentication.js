@@ -1,17 +1,17 @@
 import React from 'react';
-import { inject } from 'mobx-react';
-
+import { connect } from 'react-redux'
 import { firebase } from '../../firebase';
+import { setSessionStore } from '../../actions';
 
 const withAuthentication = (Component) => {
   class WithAuthentication extends React.Component {
     componentDidMount() {
-      const { sessionStore } = this.props;
+      const { sessionStore, setAuthUser } = this.props;
 
       firebase.auth.onAuthStateChanged(authUser => {
         authUser
-          ? sessionStore.setAuthUser(authUser)
-          : sessionStore.setAuthUser(null);
+          ? setAuthUser(authUser) // Set auth to props
+          : setAuthUser(null);
       });
     }
 
@@ -22,7 +22,22 @@ const withAuthentication = (Component) => {
     }
   }
 
-  return inject('sessionStore')(WithAuthentication);
+  const mapStateToProps = state => {
+    return {
+      sessionStore: state.sessionStore
+    }
+  }
+
+  const mapDispatchToProps = (dispatch, props) => {
+    return {
+      setAuthUser : (authUser) => {
+        dispatch(setSessionStore(authUser));
+      }
+    }
+  }
+
+
+  return connect(mapStateToProps,mapDispatchToProps)(WithAuthentication);
 }
 
 export default withAuthentication;

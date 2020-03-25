@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { inject, observer } from 'mobx-react';
+import { connect } from 'react-redux'
 import { compose } from 'recompose';
 
 import { firebase } from '../../firebase';
@@ -21,10 +21,16 @@ const withAuthorization = (condition) => (Component) => {
     }
   }
 
+  const mapStateToProps = (state) => {
+    return {
+      sessionStore : state.sessionStore
+    }
+  }
+
+
   return compose(
     withRouter,
-    inject('sessionStore'),
-    observer
+    connect(mapStateToProps, null),
   )(WithAuthorization);
 }
 

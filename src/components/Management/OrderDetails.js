@@ -44,15 +44,7 @@ const OrderDetails = () =>  {
     setDataSource([...dataSource, newData]);
     setCount(count+1);
   };
-
-  // const handleSave = row => {
-  //   const newData = [...dataSource];
-  //   const index = newData.findIndex(item => row.key === item.key);
-  //   const item = newData[index];
-  //   newData.splice(index, 1, { ...item, ...row });
-  //   setDataSource(newData)
-
-  // };
+  
   const success = () => {
     message.success('Success')
   };

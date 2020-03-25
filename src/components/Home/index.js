@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+import { connect } from 'react-redux'
 import { compose } from 'recompose';
 import { Layout, Menu, Breadcrumb, Button, Table, Spin } from 'antd';
 import withAuthorization from '../Session/withAuthorization';
@@ -7,6 +7,7 @@ import { db, firebase } from '../../firebase';
 import Product from '../Management/Product'
 import Order from '../Management/Order'
 import Customer from '../Management/Customer'
+import { setUserStore } from '../../actions';
 import _ from 'lodash';
 
 const { Header, Content, Footer } = Layout;
@@ -25,10 +26,10 @@ class HomePage extends Component {
     _.filter(objects, (o) => { return _.isObject(o) })
 
   componentDidMount() {
-    const { userStore } = this.props;
+    const { userStore, setUsers } = this.props;
 
     db.onceGetUsers().then(snapshot =>
-      userStore.setUsers(snapshot.val())     
+      setUsers(snapshot.val()) // set user     
     );
     this.getLatestData();
     
@@ -70,7 +71,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { users } = this.props.userStore;
+    // const { users } = this.props.userStore;
 
     return (
       <Layout className='layout'>
@@ -104,20 +105,31 @@ class HomePage extends Component {
   }
 }
 
-const UserList = ({ users }) =>
-  <div>
-    <h2>List of Usernames of Users</h2>
-    <p>(Saved on Sign Up in Firebase Database)</p>
+// const UserList = ({ users }) =>
+//   <div>
+//     <h2>List of Usernames of Users</h2>
+//     <p>(Saved on Sign Up in Firebase Database)</p>
 
-    {Object.keys(users).map(key =>
-      <div key={key}>{users[key].username}</div>
-    )}
-  </div>
+//     {Object.keys(users).map(key =>
+//       <div key={key}>{users[key].username}</div>
+//     )}
+//   </div>
 
 const authCondition = (authUser) => !!authUser;
+const mapStateToProps = (state) => {
+  return {
+    userStore : state.userStore
+  }
+}
 
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    setUsers : (authUser) => {
+      dispatch(setUserStore(authUser));
+    }
+  }
+}
 export default compose(
   withAuthorization(authCondition),
-  inject('userStore'),
-  observer
+  connect(mapStateToProps, mapDispatchToProps)
 )(HomePage);
