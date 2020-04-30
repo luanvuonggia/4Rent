@@ -56,7 +56,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "sasstocss": "node-sass src/sass/style.scss src/css/style.css -w"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -105,6 +106,7 @@
   "devDependencies": {
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "favicons-webpack-plugin": "^3.0.1",
+    "node-sass": "^4.14.0",
     "preload-webpack-plugin": "^3.0.0-beta.3"
   }
 }

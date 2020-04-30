@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif; }
+
+.btn:visited {
+  display: inline-block;
+  position: relative; }
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); }
+.btn:active {
+  outline: none;
+  transform: translateY(-1px); }
+.btn::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+  transition: all 1.4s; }
+.btn:hover::after {
+  transform: scaleX(1.5) scaleY(1.6);
+  opacity: 0; }
+
+/*# sourceMappingURL=style.css.map */

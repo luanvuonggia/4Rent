@@ -3,7 +3,6 @@ import { Table, message, Button, Divider, Popconfirm, Tag } from 'antd';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
 import ProductForm from '../Form/ProductForm'
-
 const success = () => {
   message.success('Success!')
 };
@@ -24,11 +23,6 @@ const Product = props => {
   title: 'In Stock',
   dataIndex: 'inStock',
   key: 'inStock',
-  // render: available => (
-  //   <Tag color={available? 'green' : 'red'}>
-  //       {_.toString(available)}
-  //   </Tag>
-  // )
 }, {
   title: 'Action',
   key: 'action',
@@ -100,7 +94,7 @@ const Product = props => {
                 isEdit={isEdit}
                 ProductEdit={productEdit}
         />
-        <Button type='primary' onClick={showModal}>Add Product</Button> 
+        <Button type='primary' className="btn" onClick={showModal}>Add Product</Button> 
         <Table dataSource={props.dsProduct} columns={columns} />
       </div>
     );

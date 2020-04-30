@@ -1,0 +1,35 @@
+$color-box-shadow: rgba(0,0,0, .2);
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.btn {
+    &:visited{
+        display: inline-block;
+        position: relative;
+    }
+    &:hover{
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px $color-box-shadow;
+    }
+    &:active{
+        outline:none;
+        transform: translateY(-1px);
+    }
+    &::after{
+        content: "";
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        z-index: -1;
+        transition: all 1.4s;
+    }
+    &:hover::after{
+        transform: scaleX(1.5) scaleY(1.6);
+        opacity: 0;
+    }
+}

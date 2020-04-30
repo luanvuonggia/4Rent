@@ -3,7 +3,6 @@ import { Table, Button, Divider, Row, Col, message, Popconfirm} from 'antd';
 import { PlusCircleOutlined, DownloadOutlined  } from '@ant-design/icons';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
-
 import {
   BrowserRouter as Router,
   Link,
@@ -77,11 +76,11 @@ constructor(props) {
         <Row type='flex' justify='space-between' style={{ height: '100%' }}>
         <Col> 
           <Link to='/add-order'>
-          <Button type='primary' icon={<PlusCircleOutlined/>}>Add</Button>
+          <Button type='primary' className='btn' icon={<PlusCircleOutlined/>}>Add</Button>
           </Link>
         </Col>
         <Col>
-          <Button type='primary' icon={<DownloadOutlined />}>Export</Button>
+          <Button type='primary' className='btn' icon={<DownloadOutlined />}>Export</Button>
         </Col>
         </Row>
         <Table dataSource={this.props.orders} columns={this.columns} pagination={false} />

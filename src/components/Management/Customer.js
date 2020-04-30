@@ -3,7 +3,6 @@ import { Table, Button, message, Divider, Popconfirm } from 'antd';
 import { firebase } from '../../firebase';
 import _ from 'lodash';
 import CustomerForm from '../Form/CustomerForm';
-
 const success = () => {
   message.success('Success')
 };
@@ -91,7 +90,7 @@ const Customer = props => {
                 isEdit={isEdit}
                 cusEdit={cusEdit}
         />
-        <Button type='primary' onClick={showModal}>Add new</Button> 
+        <Button type='primary' className='btn' onClick={showModal}>Add new</Button> 
         <Table dataSource={props.Customers} columns={columns} />
       </div>
     );
