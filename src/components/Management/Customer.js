@@ -1,6 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import { Table, Button, message, Divider, Popconfirm } from 'antd';
 import { firebase } from '../../firebase';
+import { connect } from 'react-redux'
+import {addCustomer} from './../../actions'
 import _ from 'lodash';
 import CustomerForm from '../Form/CustomerForm';
 const success = () => {
@@ -50,7 +52,7 @@ const Customer = props => {
 
   const  onUpdate = (cusID) => {   
       setIsEdit(true);
-      setCusEdit(_.find(props.Customers, ['cusID', cusID]));
+      setCusEdit(_.find(props.customerStore, ['cusID', cusID]));
       setVisible(true);
   }
 
@@ -72,8 +74,7 @@ const Customer = props => {
         phone: values.phone || '',
         note: values.note || ''
       }
-      firebase.update(`Customer/${newIndex}`, newCustomer);
-      props.getLatestData();
+      props.add(newIndex, newCustomer);
   }
 
   const onCancel = (e) => {
@@ -91,10 +92,23 @@ const Customer = props => {
                 cusEdit={cusEdit}
         />
         <Button type='primary' className='btn' onClick={showModal}>Add new</Button> 
-        <Table dataSource={props.Customers} columns={columns} />
+        <Table dataSource={props.customerStore} columns={columns} />
       </div>
     );
 }
 
+const mapStateToProps = (state) => {
+  return {
+    customerStore : state.customerStore
+  }
+}
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    add: (index, customer) => {
+      dispatch(addCustomer(index, customer));
+    }
+  }
+}
 
-export default Customer;
+
+export default connect(mapStateToProps,mapDispatchToProps)(Customer);

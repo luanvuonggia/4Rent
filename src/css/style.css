@@ -8,7 +8,7 @@ body {
   position: relative; }
 .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); }
+  box-shadow: 0 5px 20px rgba(6, 80, 109, 0.5); }
 .btn:active {
   outline: none;
   transform: translateY(-1px); }
@@ -23,5 +23,9 @@ body {
 .btn:hover::after {
   transform: scaleX(1.5) scaleY(1.6);
   opacity: 0; }
+
+.action-text:hover {
+  transform: translateY(-3px);
+  text-shadow: 2px 2px 5px #fa0362; }
 
 /*# sourceMappingURL=style.css.map */

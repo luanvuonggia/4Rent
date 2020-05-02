@@ -1,4 +1,4 @@
-$color-box-shadow: rgba(0,0,0, .2);
+$color-box-shadow: rgba(6, 80, 109, 0.5);
 
 body {
     margin: 0;
@@ -31,5 +31,12 @@ body {
     &:hover::after{
         transform: scaleX(1.5) scaleY(1.6);
         opacity: 0;
+    }
+}
+
+.action-text {
+    &:hover {
+        transform: translateY(-3px);
+        text-shadow: 2px 2px 5px rgb(250, 3, 98);
     }
 }

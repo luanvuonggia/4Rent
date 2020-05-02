@@ -7,7 +7,7 @@ import { db, firebase } from '../../firebase';
 import Product from '../Management/Product'
 import Order from '../Management/Order'
 import Customer from '../Management/Customer'
-import { setUserStore } from '../../actions';
+import { setUserStore, initCustomer, initProduct } from '../../actions';
 import _ from 'lodash';
 
 const { Header, Content, Footer } = Layout;
@@ -26,7 +26,7 @@ class HomePage extends Component {
     _.filter(objects, (o) => { return _.isObject(o) })
 
   componentDidMount() {
-    const { userStore, setUsers } = this.props;
+    const { userStore, setUsers, customerStore } = this.props;
 
     db.onceGetUsers().then(snapshot =>
       setUsers(snapshot.val()) // set user     
@@ -41,6 +41,8 @@ class HomePage extends Component {
       firebase.getData('Order'),
       firebase.getData('Product')]
       ).then(([Customer, Order, Product]) => {
+        this.props.initCustomers(Customer);
+        this.props.initProducts(Product);
         this.setState({
           Customer: this.filterUndefinedObjects(Customer) || [],
           Order: this.filterUndefinedObjects(Order) || [],
@@ -61,9 +63,9 @@ class HomePage extends Component {
       case 'dh':
         return <Order orders={this.state.Order} customers={this.state.Customer} getLatestData={this.getLatestData}/>;
       case 'kh':
-        return <Customer Customers={this.state.Customer} getLatestData={this.getLatestData}/>;
+        return <Customer />;
       case 'sp':
-        return <Product dsProduct={this.state.Product} getLatestData={this.getLatestData}/>;
+        return <Product />;
       default:
         break;
     }
@@ -105,20 +107,11 @@ class HomePage extends Component {
   }
 }
 
-// const UserList = ({ users }) =>
-//   <div>
-//     <h2>List of Usernames of Users</h2>
-//     <p>(Saved on Sign Up in Firebase Database)</p>
-
-//     {Object.keys(users).map(key =>
-//       <div key={key}>{users[key].username}</div>
-//     )}
-//   </div>
-
 const authCondition = (authUser) => !!authUser;
 const mapStateToProps = (state) => {
   return {
-    userStore : state.userStore
+    userStore : state.userStore,
+    customerStore : state.customerStore
   }
 }
 
@@ -126,9 +119,16 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     setUsers : (authUser) => {
       dispatch(setUserStore(authUser));
+    },
+    initCustomers : (customers) => {
+      dispatch(initCustomer(customers))
+    },
+    initProducts : (products) => {
+      dispatch(initProduct(products))
     }
   }
 }
+
 export default compose(
   withAuthorization(authCondition),
   connect(mapStateToProps, mapDispatchToProps)

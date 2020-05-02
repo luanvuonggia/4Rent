@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Table, message, Button, Divider, Popconfirm, Tag } from 'antd';
 import { firebase } from '../../firebase';
+import { connect } from 'react-redux'
+
 import _ from 'lodash';
 import ProductForm from '../Form/ProductForm'
 const success = () => {
@@ -28,10 +30,10 @@ const Product = props => {
   key: 'action',
   render: (text, record) => (
     <span>
-      <a onClick={()=>onUpdate(record.productID)}>Update</a>
+      <a className='action-text' onClick={()=>onUpdate(record.productID)}>Update</a>
       <Divider type='vertical' />
       <Popconfirm title='Delete this product?' onConfirm={() => onDelete(record.productID)} okText='Ok' cancelText='Cancel'>
-      <a>Delete</a>
+      <a className='action-text'>Delete</a>
       </Popconfirm>
     </span>
   )}];
@@ -47,7 +49,7 @@ const Product = props => {
 
   const onUpdate = (productID) => {
     setIsEdit(true);
-    setProductEdit(_.find(props.dsProduct, ['productID', productID]));
+    setProductEdit(_.find(props.productStore, ['productID', productID]));
     setVisible(true);
     
   }
@@ -95,10 +97,22 @@ const Product = props => {
                 ProductEdit={productEdit}
         />
         <Button type='primary' className="btn" onClick={showModal}>Add Product</Button> 
-        <Table dataSource={props.dsProduct} columns={columns} />
+        <Table dataSource={props.productStore} columns={columns} />
       </div>
     );
 }
+const mapStateToProps = (state) => {
+  return {
+    productStore : state.productStore
+  }
+}
+// const mapDispatchToProps = (dispatch, props) => {
+//   return {
+//     add: (index, customer) => {
+//       dispatch(addCustomer(index, customer));
+//     }
+//   }
+// }
 
 
-export default Product;
+export default connect(mapStateToProps,null)(Product);

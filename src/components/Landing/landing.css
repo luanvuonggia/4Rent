@@ -18,15 +18,17 @@
     size:40;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: azure;
+    animation-iteration-count: infinite;
     animation-name: animation-h1;
     animation-duration: 2s;
-    animation-delay: 2s;
+    animation-delay: 3s;
 }
 
 .h2-content {
     size: 25;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: azure;
+    letter-spacing: 4px;
 }
 
 .img {
